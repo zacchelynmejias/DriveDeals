@@ -19,6 +19,33 @@ function BuyNow(){
     const VIN = localStorage.getItem('VIN');
     const dealer_name = localStorage.getItem('dealer_name');
 
+    const deduct = async () => {
+        const car_name = localStorage.getItem('car_name');
+        const { data } = await supabase
+        .from('dealer_inventory')
+        .select('*')
+        .eq('car_name', car_name)
+        .single();
+
+        console.log(data);
+        const newstocks = data.stocks;
+        localStorage.setItem('newstocks', newstocks);
+
+        try {
+          const deductedstocks = localStorage.getItem('newstocks')
+          let newStocks = parseInt(deductedstocks) - 1;
+            const { data } = await supabase
+            .from('dealer_inventory')
+            .update({ 'stocks': newStocks })    
+            .eq('car_name', car_name);
+            console.log(data);
+            buyconfirm();
+        } 
+        catch(error) {
+            console.error('Error during login:', error.message); 
+        }
+    }
+
     const buyconfirm = async () => {
         try {
             const { data } = await supabase
@@ -137,7 +164,7 @@ function BuyNow(){
                                     <Button 
                                         variant="dark" 
                                         className="check-out w-50"
-                                        onClick={buyconfirm}
+                                        onClick={deduct}
                                         style={{height: "55px"}}
                                     >
                                         Buy Now

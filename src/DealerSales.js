@@ -5,14 +5,14 @@ import { useState, useEffect, useCallback } from 'react';
 
 function UserPurchase(){
     const [purchaseHistory, setPurchaseHistory] = useState([]);
-    const user_name = localStorage.getItem('user_name');
+    const dealer_name = localStorage.getItem('dealer_name');
 
     const fetchPurchaseHistory = useCallback(async () => {
         try {
           const { data, error } = await supabase
-            .from('user_purchase')
+            .from('dealer_sales')
             .select('*')
-            .eq('user_name', user_name);
+            .eq('dealer_name', dealer_name);
 
             if (error) {
                 throw error;
@@ -21,7 +21,7 @@ function UserPurchase(){
         } catch (error) {
           console.error('Error during fetching purchase history:', error.message);
         }
-    }, [user_name]);
+    }, [dealer_name]);
     
     useEffect(() => {
         fetchPurchaseHistory();
