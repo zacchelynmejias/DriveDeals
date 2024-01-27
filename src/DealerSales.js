@@ -31,7 +31,7 @@ function UserPurchase(){
         <>
             <DealerNavbar />
             <Container className='mt-4'>
-                <Table responsive="sm">
+                <Table responsive="sm" striped bordered hover>
                     <thead>
                         <tr>
                             <th>CUSTOMER</th>

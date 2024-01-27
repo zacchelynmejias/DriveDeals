@@ -1,6 +1,6 @@
 import './app.css';
 import DealerNavbar from "./DealerNavbar.js";
-import { Col, Row, Card, Container, Button, Form } from "react-bootstrap";
+import { Card, Container, Button, Form } from "react-bootstrap";
 import supabase from './SupabaseClient.js';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,16 +8,15 @@ import { useNavigate } from 'react-router-dom';
 function CompanyVehicles(){
     const [carData, setCarData] = useState(null);
     const [error] = useState(null);
-    const dealerName = localStorage.getItem('dealer_name');
-    const [searchTerm, setSearchTerm] = useState("");
+    const dealerName = localStorage.getItem('name');
     const navigate = useNavigate();;
 
     const handleLogin = useCallback(async () => {
         try {
             const { data } = await supabase
-            .from('cars')
+            .from('Vehicles')
             .select('*') 
-            .eq('dealer_name', dealerName);
+            .eq('brand', dealerName);
             setCarData(data);
         } 
         catch (error) {
@@ -30,14 +29,13 @@ function CompanyVehicles(){
     }, [handleLogin]);
 
     const onClickBuyNow = (car) => {
-        const { dealer_name, car_name, car_style, price, VIN, image_path, stocks } = car;
-        localStorage.setItem('dealer_name', dealer_name);
-        localStorage.setItem('car_name', car_name);
+        const { brand, vehicle_name, car_style, price, VIN,image_path } = car;
+        localStorage.setItem('brand', brand);
+        localStorage.setItem('vehicle_name', vehicle_name);
         localStorage.setItem('car_style', car_style);
         localStorage.setItem('price', price);
         localStorage.setItem('VIN', VIN);
         localStorage.setItem('image_path', image_path);
-        localStorage.setItem('stocks', stocks);
         navigate('/dealerconfirm');
     };
     
@@ -51,15 +49,14 @@ function CompanyVehicles(){
                         placeholder="Search here. . ."
                         className="me-2 w-25"
                         aria-label="Search"
-                        onChange={event => setSearchTerm(event.target.value)}
                     />
                 </Form>
             </Container>
             {error && <p>{error}</p>}
             {carData && (
-                <Container className='flexcon mt-4'>
-                    {carData.filter(car => car.car_name.toLowerCase().includes(searchTerm.toLowerCase())).map((car) => (
-                        <CarCard key={car.vin} car={car} onClickBuyNow={onClickBuyNow} />
+                <Container className='mt-4 mb-4 d-flex'>
+                    {carData.map((car) => (
+                        <Vehicles key={car.vin} car={car} onClickBuyNow={onClickBuyNow} />
                     ))}
                 </Container>
             )}
@@ -67,27 +64,24 @@ function CompanyVehicles(){
     );
 };
     
-function CarCard({ car, onClickBuyNow }) {
-    const {car_name, price, image_path, stocks} = car;
+function Vehicles({ car, onClickBuyNow }) {
+    const {vehicle_name, price,image_path, Stocks  } = car;
     const handleBuyNowClick = () => {
         onClickBuyNow(car);
     };
     
     return (
         <>
-        <Container>
-            <Card style={{ 
-                maxWidth: '540px', 
-                boxShadow: 'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
-                padding: '20px 10px'
-            }}>
-                <Row>
-                    <Col sm={7}>
-                        <Card.Img src={image_path} className="card-image" />
-                    </Col>
-                    <Col sm={5}>
-                        <Card.Title className="mt-2">{car_name}</Card.Title>
-                        <Card.Text>Price: {price}<br/>Stocks: {stocks}</Card.Text>
+            <Container>
+                <Card style={{ 
+                    maxWidth: '300px', 
+                    boxShadow: 'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                    padding: '20px 10px'
+                }}>
+                    <Card.Img src={image_path} className="card-image" />
+                    <Card.Body>
+                        <Card.Title className="mt-2">{vehicle_name}</Card.Title>
+                        <Card.Text>Price: {price}<br/>Stocks: {Stocks}</Card.Text>
                         <Button 
                             variant="dark" 
                             className="check-out" 
@@ -95,15 +89,9 @@ function CarCard({ car, onClickBuyNow }) {
                         >
                             Buy Now
                         </Button>
-                    </Col>
-                </Row>
-            </Card>
-        </Container>
-        <div className="footer1 d-flex">
-            <div style={{fontSize: "10px"}} className='mt-2'>
-                © 2024 Copyright: ITE 19 - Appraisal
-            </div>
-        </div>
+                    </Card.Body>
+                </Card>
+            </Container>
         </>
       );
 }

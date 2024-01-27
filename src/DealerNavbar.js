@@ -17,7 +17,7 @@ function DealerNavbar() {
     <Navbar expand="lg" bg="dark" data-bs-theme="dark" sticky="top">
       <Container>
         <Image src='logo.png' style={{width: '60px', height: '60px'}}/> 
-        <Navbar.Brand href="/dealerhome">AutoHub</Navbar.Brand>
+        <Navbar.Brand href="/dealerhome">DriveDeals</Navbar.Brand>
             <Navbar.Offcanvas bplacement="end">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>
