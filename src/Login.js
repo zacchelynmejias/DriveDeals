@@ -68,13 +68,14 @@ function Login() {
             <Card style={{ 
                 width: '30rem',
                 padding: '50px 50px', 
-                boxShadow: 'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px'
+                boxShadow: 'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
+                backgroundColor: '#818181'
             }}>
                 <Card.Body className='d-flex flex-column'>
                     <div className="text-center">
                     <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-                        style={{ width: '185px' }}
+                        src="logo.png"
+                        style={{ width: '185px', marginBottom: '-15%' }}
                         alt="logo"
                     />
                         <h4 className="mt-1 mb-5 pb-1">Welcome to DriveDeals</h4>
@@ -125,8 +126,8 @@ function Login() {
                         </Col>
                     </Row>
                     <div className="d-flex mb-4 mt-5 justify-content-center">
-                        <p>Don't have an account?</p>
-                        <p className='mx-2'>Create New</p>
+                        {/* <p>Don't have an account?</p>
+                        <p className='mx-2'>Create New</p> */}
                     </div>
                 </Card.Body>
             </Card>

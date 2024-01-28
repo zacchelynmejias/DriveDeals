@@ -22,8 +22,8 @@ function UserHome(){
                 <Container>
                     <div className="info">
                         <h1>
-                            <span style={{color: '#Ffae42', fontSize: '48px'}}>Welcome to AutoHub</span> <br/> 
-                            your one-stop destination for buying cars online! <br/>
+                            <span style={{color: '#Ffae42', fontSize: '48px'}}>Dive into DriveDeals</span> <br/> 
+                            where buying a car is not just a transaction—it's an experience! <br/>
                             <Button onClick={handleCarListClick} variant="dark" className='mt-4 me-3 p-2' href='/userproducts'>
                                 {loadingCarList ? (
                                     <>
@@ -38,7 +38,7 @@ function UserHome(){
                                     </>
                                 ) : "View Car Lists"}
                             </Button>
-                            <Button onClick={handlePurchasesClick} variant="outline-dark" className='mt-4 p-2' href='/userpurchase'>
+                            {/* <Button onClick={handlePurchasesClick} variant="outline-dark" className='mt-4 p-2' href='/userpurchase'>
                                 {loadingPurchases ? (
                                     <>
                                         <Spinner
@@ -51,19 +51,20 @@ function UserHome(){
                                         Loading...
                                     </>
                                 ) : "See My Purchases"}
-                            </Button>
+                            </Button> */}
                         </h1>
                     </div>
                 </Container>
                 <Container>
                     <div className='pic'>
-                        <Image src='home.png' />
+                        <Image src='logo.png' />
                     </div>
                 </Container>
             </section>
+            
             <div className="footer1 d-flex">
                 <div style={{fontSize: "10px"}} className='mt-2'>
-                © 2024 Copyright: Final-Project
+                {/* © 2024 Copyright: Final-Project */}
                 </div>
             </div>
         </>

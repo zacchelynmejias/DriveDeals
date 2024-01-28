@@ -21,8 +21,8 @@ function UserNavbar() {
                     <Nav className="justify-content-end flex-grow-1 pe-3">
                         <Nav.Link href="/userproducts">Vehicles</Nav.Link>
                         <NavDropdown title="MyAccount">
-                            <NavDropdown.Item href="#action3">Profile</NavDropdown.Item>
-                            <NavDropdown.Divider />
+                            {/* <NavDropdown.Item href="#action3">Profile</NavDropdown.Item> */}
+                            {/* <NavDropdown.Divider /> */}
                             <NavDropdown.Item href="/">
                                 Logout
                             </NavDropdown.Item>

@@ -1,7 +1,15 @@
+.flex-column {
+  flex-direction: column!important;
+  margin-top: -65px;
+  margin-bottom: -83px;
+}
+
 section {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    background-color: #818181;
   }
 
 .info {

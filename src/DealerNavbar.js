@@ -30,8 +30,8 @@ function DealerNavbar() {
                         <Nav.Link href="/dealerinventory">Inventory</Nav.Link>
                         <Nav.Link href="/dealersales">Sales</Nav.Link>
                         <NavDropdown title="MyAccount">
-                            <NavDropdown.Item href="#action3">Profile</NavDropdown.Item>
-                            <NavDropdown.Divider />
+                            {/* <NavDropdown.Item href="#action3">Profile</NavDropdown.Item> */}
+                            {/* <NavDropdown.Divider /> */}
                             <NavDropdown.Item onClick={logout}>
                                 Logout
                             </NavDropdown.Item>
