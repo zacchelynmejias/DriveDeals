@@ -9,8 +9,8 @@ function UserNavbar() {
   return (
     <Navbar expand="lg" bg="dark" data-bs-theme="dark" sticky="top">
       <Container>
-        <Image src='logo.png' style={{width: '60px', height: '60px'}}/> 
-        <Navbar.Brand href="/userhome">AutoHub</Navbar.Brand>
+        <Image src='logo.png' style={{width: '80px', height: '90px'}}/> 
+        <Navbar.Brand href="/userhome">DriveDeals</Navbar.Brand>
             <Navbar.Offcanvas bplacement="end">
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>
@@ -20,7 +20,6 @@ function UserNavbar() {
                 <Offcanvas.Body>
                     <Nav className="justify-content-end flex-grow-1 pe-3">
                         <Nav.Link href="/userproducts">Vehicles</Nav.Link>
-                        <Nav.Link href="/userpurchase">Purchases</Nav.Link>
                         <NavDropdown title="MyAccount">
                             <NavDropdown.Item href="#action3">Profile</NavDropdown.Item>
                             <NavDropdown.Divider />

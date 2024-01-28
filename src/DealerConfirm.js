@@ -7,24 +7,24 @@ const DealerConfirm = () =>  {
     const [error] = useState(null);
     const navigate = useNavigate();
 
-    const deduct = useCallback(async (car_name) => {
+    const deduct = useCallback(async (vehicle_name) => {
         const { data } = await supabase
-        .from('cars')
+        .from('Vehicles')
         .select('*')
-        .eq('car_name', car_name)
-        .single();
+        .eq('vehicle_name', vehicle_name)
 
         console.log(data);
-        const newstocks = data.stocks;
+        const newstocks = data[0].stocks;
+        console.log(newstocks);
         localStorage.setItem('newstocks', newstocks);
 
         try {
           const deductedstocks = localStorage.getItem('newstocks')
           let newStocks = parseInt(deductedstocks) - 1;
             const { data } = await supabase
-            .from('cars')
+            .from('Vehicles')
             .update({ 'stocks': newStocks })    
-            .eq('car_name', car_name);
+            .eq('vehicle_name', vehicle_name);
             console.log(data);
             alert('Purchase Successful');
             navigate('/dealerhome');
@@ -34,16 +34,17 @@ const DealerConfirm = () =>  {
         }
     }, [navigate]); 
 
-    const store1 = useCallback(async (car_name) => {
+    const store1 = useCallback(async (vehicle_name) => {
         const stocks = localStorage.getItem('stocks');
+        console.log(stocks);
         let newStocks = parseInt(stocks) + 1;
         try {
             const { data } = await supabase
-            .from('dealer_inventory')
+            .from('Dealer_Inventory')
             .update({ 'stocks': newStocks })    
-            .eq('car_name', car_name);
+            .eq('vehicle_name', vehicle_name);
             console.log(data);
-            deduct(car_name);
+            deduct(vehicle_name);
         } 
         catch(error) {
             console.error('Error during login:', error.message);  
@@ -51,8 +52,8 @@ const DealerConfirm = () =>  {
     }, [deduct]); 
 
     const store2 = useCallback(async () => {
-        const dealer_name = localStorage.getItem('dealer_name');
-        const car_name = localStorage.getItem('car_name');
+        const brand = localStorage.getItem('brand');
+        const vehicle_name = localStorage.getItem('vehicle_name');
         const car_style = localStorage.getItem('car_style');
         const price = localStorage.getItem('price');
         const vin = localStorage.getItem('VIN');
@@ -60,11 +61,11 @@ const DealerConfirm = () =>  {
 
         try {
             const { data } = await supabase
-            .from('dealer_inventory')
+            .from('Dealer_Inventory')
             .insert([
                 {
-                    dealer_name,
-                    car_name,
+                    brand,
+                    vehicle_name,
                     car_style,
                     price,
                     VIN: vin,
@@ -74,9 +75,7 @@ const DealerConfirm = () =>  {
             ])
             .select()
             console.log(data);
-            deduct(car_name);
-            alert("Ordered Successfully")
-            navigate('/dealerinventory');
+            deduct(vehicle_name);
         } 
         catch (error) {
             console.error('Error during login:', error.message);
@@ -84,19 +83,20 @@ const DealerConfirm = () =>  {
     }, [navigate, deduct]);
 
     const buyConfirm = useCallback(async () => {
-        const car_name = localStorage.getItem('car_name');
+        const vehicle_name = localStorage.getItem('vehicle_name');
+        console.log(vehicle_name);
         try {
             const { data } = await supabase
-            .from('dealer_inventory')
+            .from('Dealer_Inventory')
             .select('*')
-            .eq('car_name', car_name)
+            .eq('vehicle_name', vehicle_name)
             .single();
             console.log(data);
                      
-            if (data && data.car_name === car_name) {
+            if (data && data.vehicle_name === vehicle_name) {
                 const stocks = data.stocks;
                 localStorage.setItem('stocks', stocks);
-                store1(car_name);
+                store1(vehicle_name);
             } else {
                 store2();
             }
@@ -114,7 +114,6 @@ const DealerConfirm = () =>  {
         <div>
             <DealerNavbar />
             <div>
-                {error && <p>{error}</p>}
             </div>
         </div>
     );

@@ -6,25 +6,24 @@ import { Container, Row, Col, Card, Form, Button, FloatingLabel } from 'react-bo
 
 function BuyNow(){
     const [error, setError] = useState(null);
-    const [carColor, setCarColor] = useState('Red');
-    const [carEngine, setCarEngine] = useState('v4');
-    const [transmissionType, setTransmissionType] = useState('Automatic');
+    const [Color, setColor] = useState('Yellow');
+    const [Transmission, setTransmission] = useState('Automatic');
     const navigate = useNavigate();
 
-    const user_name = localStorage.getItem('user_name');
-    const car_name = localStorage.getItem('car_name');
+    const username = localStorage.getItem('name');
+    const vehicle_name = localStorage.getItem('vehicle_name');
     const car_style = localStorage.getItem('car_style');
-    const car_price = localStorage.getItem('price');
-    const image_path = localStorage.getItem('image_path');
+    const price = localStorage.getItem('price');
     const VIN = localStorage.getItem('VIN');
-    const dealer_name = localStorage.getItem('dealer_name');
+    const brand = localStorage.getItem('brand');
+    const image_path = localStorage.getItem('image_path')
 
     const deduct = async () => {
         const car_name = localStorage.getItem('car_name');
         const { data } = await supabase
-        .from('dealer_inventory')
+        .from('Dealer_Inventory')
         .select('*')
-        .eq('car_name', car_name)
+        .eq('vehicle_name', vehicle_name)
         .single();
 
         console.log(data);
@@ -35,9 +34,9 @@ function BuyNow(){
           const deductedstocks = localStorage.getItem('newstocks')
           let newStocks = parseInt(deductedstocks) - 1;
             const { data } = await supabase
-            .from('dealer_inventory')
+            .from('Dealer_Inventory')
             .update({ 'stocks': newStocks })    
-            .eq('car_name', car_name);
+            .eq('vehicle_name', vehicle_name);
             console.log(data);
             buyconfirm();
         } 
@@ -49,54 +48,24 @@ function BuyNow(){
     const buyconfirm = async () => {
         try {
             const { data } = await supabase
-            .from('user_purchase')
+            .from('Sales')
             .insert([
                 {
-                    user_name,
-                    car_name,
+                    username,
+                    vehicle_name,
                     car_style,
-                    car_price,
-                    image_path,
-                    car_color: carColor,
-                    car_engine: carEngine,
-                    transmission_type: transmissionType,
+                    price,
+                    color: Color,
+                    transmission: Transmission,
                     VIN,
+                    brand,
                 },
             ])
             .select();
     
             console.log(data);
             alert('Order Successful');
-            dealersales();
-            navigate('/userpurchase');
-        } 
-        catch (error) {
-          console.error('Error during login:', error.message);
-          setError(error.message);
-        }
-    };
-
-    const dealersales = async () => {
-        try {
-            const { data } = await supabase
-            .from('dealer_sales')
-            .insert([
-                {
-                    dealer_name,
-                    user_name,
-                    car_name,
-                    car_style,
-                    car_price,
-                    image_path,
-                    car_color: carColor,
-                    car_engine: carEngine,
-                    transmission_type: transmissionType,
-                    VIN,
-                },
-            ])
-            .select();
-    
-            console.log(data);
+            navigate('/userproducts');
         } 
         catch (error) {
           console.error('Error during login:', error.message);
@@ -107,17 +76,13 @@ function BuyNow(){
     return(
         <>
             <UserNavbar />
-            <Container className='mt-5'>
-                <Card className='mt-5' style={{ 
-                    boxShadow: 'rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px',
-                    padding: '20px 20px'
-                }}>
+                <Container className='mt-5 p-5'>
                     <Row>
                         <Col><Card.Img src={image_path}/></Col>
                         <Col>
                             <div>
-                                <Card.Title className="mt-3">{car_name}</Card.Title>
-                                <Card.Title className="mt-1">{car_price}</Card.Title><br/>
+                                <Card.Title className="mt-3">{brand} {vehicle_name}</Card.Title>
+                                <Card.Title className="mt-1">{price}</Card.Title><br/>
                                 <Card.Text>
                                     <Row>
                                         <Col>
@@ -125,24 +90,18 @@ function BuyNow(){
                                                 controlId="floatingSelectGrid"
                                                 label="Choose car color : "
                                             >
-                                                <Form.Select value={carColor} onChange={(e) => setCarColor(e.target.value)} aria-label="Floating label select example">
-                                                    <option value="C1">C1</option>
-                                                    <option value="C2">C2</option>
-                                                    <option value="C3">C3</option>
+                                                <Form.Select 
+                                                    value={Color} 
+                                                    onChange={(e) => setColor(e.target.value)} 
+                                                    aria-label="Floating label select example"
+                                                >
+                                                    <option value="Yellow">Yellow</option>
+                                                    <option value="Maroon">Maroon</option>
+                                                    <option value="Black">Black</option>
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
-                                        <Col>
-                                            <FloatingLabel
-                                                controlId="floatingSelectGrid"
-                                                label="Transmission type : "
-                                            >
-                                                <Form.Select value={carEngine} onChange={(e) => setCarEngine(e.target.value)} aria-label="Floating label select example">
-                                                    <option value="Automatic">Automatic</option>
-                                                    <option value="Manual">Manual</option>
-                                                </Form.Select>
-                                            </FloatingLabel>
-                                        </Col>
+    
                                         <Row>
                                             <Col>
                                                 <FloatingLabel
@@ -150,10 +109,13 @@ function BuyNow(){
                                                     controlId="floatingSelectGrid"
                                                     label="Car Engine : "
                                                 >
-                                                    <Form.Select value={transmissionType} onChange={(e) => setTransmissionType(e.target.value)} aria-label="Floating label select example">
-                                                        <option value="v4">v4</option>
-                                                        <option value="v6">v6</option>
-                                                        <option value="v8">v8</option>
+                                                    <Form.Select 
+                                                        value={Transmission} 
+                                                        onChange={(e) => setTransmission(e.target.value)} 
+                                                        aria-label="Floating label select example"
+                                                    >
+                                                        <option value="Automatic">Automatic</option>
+                                                        <option value="Manual">Manual</option>
                                                     </Form.Select>
                                                 </FloatingLabel>
                                             </Col>
@@ -174,13 +136,7 @@ function BuyNow(){
                             </div>
                         </Col>
                     </Row>
-                </Card>
-            </Container>
-            <div className="footer1 d-flex">
-                <div style={{fontSize: "10px"}} className='mt-2'>
-                © 2024 Copyright: Final Project
-                </div>
-            </div>
+                </Container>
         </>
     );
 }

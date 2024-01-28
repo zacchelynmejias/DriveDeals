@@ -1,67 +1,81 @@
-import { Table, Container } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import DealerNavbar from "./DealerNavbar.js";
 import supabase from './SupabaseClient.js';
 import { useState, useEffect, useCallback } from 'react';
 
-function UserPurchase(){
+function DealerSales() {
+    const [error, setError] = useState(null);
     const [purchaseHistory, setPurchaseHistory] = useState([]);
-    const dealer_name = localStorage.getItem('dealer_name');
+    const name = localStorage.getItem('name');
+  
+    const formatDateTime = (dateTimeString) => {
+        const options = {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+        };
+        return new Date(dateTimeString).toLocaleString(undefined, options);
+    };
 
-    const fetchPurchaseHistory = useCallback(async () => {
+    const fetchPurchaseHistory = async () => {
         try {
-          const { data, error } = await supabase
-            .from('dealer_sales')
+            const { data, error } = await supabase
+            .from('Sales')
             .select('*')
-            .eq('dealer_name', dealer_name);
-
+            .eq('brand', name);
             if (error) {
-                throw error;
-            } 
+            throw error;
+            }
             setPurchaseHistory(data);
-        } catch (error) {
-          console.error('Error during fetching purchase history:', error.message);
+        } 
+        catch (error) {
+            console.error('Error during fetching purchase history:', error.message);
+            setError('An error occurred while fetching purchase history');
         }
-    }, [dealer_name]);
-    
+    };
+  
     useEffect(() => {
         fetchPurchaseHistory();
-    }, [fetchPurchaseHistory]);
-
-    return(
+    }, [name]);
+  
+    return (
         <>
             <DealerNavbar />
-            <Container className='mt-4'>
-                <Table responsive="sm" striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>CUSTOMER</th>
-                            <th>CAR</th>
-                            <th>STYLE</th>
-                            <th>COLOR</th>
-                            <th>ENGINE</th>
-                            <th>PRICE</th>
-                            <th>TRANSMISSION</th>
+            <div className="mt-5 mb-4">
+                <Table className="table-container" striped bordered hover style={{ width: '75%', margin: 'auto', }}>
+                    <thead >
+                        <tr className='fnt'>
+                            <th>Customer</th>
+                            <th>Car Name</th>
+                            <th>Car Price</th>
+                            <th>Car Style</th>
+                            <th>Car Color</th>
+                            <th>Transmission Type</th>
                             <th>VIN</th>
+                            <th>Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         {purchaseHistory.map((purchase) => (
-                            <tr>
-                                <td>{purchase.user_name}</td>
-                                <td>{purchase.car_name}</td>
+                            <tr key={purchase.id}>
+                                <td>{purchase.username}</td>
+                                <td>{purchase.brand} {purchase.vehicle_name}</td>
+                                <td>${purchase.price}</td>
                                 <td>{purchase.car_style}</td>
-                                <td>{purchase.car_color}</td>
-                                <td>{purchase.car_engine}</td>
-                                <td>{purchase.car_price}</td>
-                                <td>{purchase.transmission_type}</td>
+                                <td>{purchase.color}</td>
+                                <td>{purchase.transmission}</td>
                                 <td>{purchase.VIN}</td>
+                                <td>{formatDateTime(purchase.created_at)}</td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
-            </Container>
+            </div>
         </>
     );
-}
+};
 
-export default UserPurchase;
+export default DealerSales;

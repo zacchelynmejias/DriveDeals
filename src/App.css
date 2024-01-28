@@ -50,8 +50,8 @@ section {
 
   .flexcon {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
-    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-gap: 20px;
     justify-items: center;
     padding-left: 60px; 
   }
