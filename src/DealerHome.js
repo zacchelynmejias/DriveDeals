@@ -12,6 +12,16 @@ function CompanyVehicles() {
     const dealerName = localStorage.getItem('name');
     const navigate = useNavigate();
 
+    
+    // Price range (Minimum to Maximum)
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
+
+    useEffect(() => {
+        handleLogin();
+    }, []);
+
+
     const handleLogin = useCallback(async () => {
         try {
             const { data } = await supabase
@@ -27,6 +37,24 @@ function CompanyVehicles() {
     useEffect(() => {
         handleLogin();
     }, [handleLogin]);
+
+    const handleFilterPrices = () => {
+        const cleanedMinPrice = minPrice.replace(/[, $€£]/g, '');
+        const cleanedMaxPrice = maxPrice.replace(/[, $€£]/g, '');
+        const minPriceValue = parseFloat(cleanedMinPrice);
+        const maxPriceValue = parseFloat(cleanedMaxPrice);
+        const filtered = carData.filter((car) => {
+            const carPrice = parseFloat(car.price.replace(/[, $€£]/g, ''));
+            return carPrice >= minPriceValue && carPrice <= maxPriceValue;
+        });
+        setCarData(filtered);
+    };
+
+    const resetFilters = () => {
+        setMinPrice('');
+        setMaxPrice('');
+        handleLogin();
+    };
 
     const onClickBuyNow = (car) => {
         const { brand, vehicle_name, car_style, price, VIN, image_path } = car;
@@ -73,10 +101,44 @@ function CompanyVehicles() {
                         aria-label="Search"
                         onChange={(event) => setSearchTerm(event.target.value)}
                     />
-                    <Button variant="dark" onClick={handleSearch}>
+                    <Button 
+                        variant="dark" 
+                        onClick={handleSearch}
+                        className="me-5"
+                        >
                         Search
                     </Button>
-                </Form>
+
+                    <div style={{ marginLeft: '10px' }} />
+                    <div style={{ marginLeft: '10px' }} />
+
+                    
+                    <Form.Control
+                        type="text"
+                        placeholder="Min Price"
+                        value={minPrice}
+                        className="me-1"
+                        onChange={(e) => setMinPrice(e.target.value)}
+                        style={{ borderColor: 'dark', width: '20%' }}
+                    />
+                    <Form.Control
+                        type="text"
+                        placeholder="Max Price"
+                        className="me-2"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                        style={{ borderColor: 'dark', width: '20%' }}
+                    />
+                
+                    <Button 
+                        variant="dark" 
+                        onClick={handleFilterPrices}
+                        style={{ backgroundColor: 'dark', borderColor: 'dark' }}
+                         >
+                        Filter
+                    </Button>
+                
+                    </Form>          
             </Container>
             {error && <p>{error}</p>}
             {carData && (
