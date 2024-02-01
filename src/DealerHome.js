@@ -50,11 +50,6 @@ function CompanyVehicles() {
         setCarData(filtered);
     };
 
-    const resetFilters = () => {
-        setMinPrice('');
-        setMaxPrice('');
-        handleLogin();
-    };
 
     const onClickBuyNow = (car) => {
         const { brand, vehicle_name, car_style, price, VIN, image_path } = car;
