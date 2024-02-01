@@ -80,7 +80,7 @@ function UserProducts() {
         all();
     };
 
-    // two functions related to filtering and resetting filters in the context of car data
+    // one functions related to filtering in the context of car data
     const handleFilterPrices = () => {
         const cleanedMinPrice = minPrice.replace(/[, $€£]/g, '');
         const cleanedMaxPrice = maxPrice.replace(/[, $€£]/g, '');
